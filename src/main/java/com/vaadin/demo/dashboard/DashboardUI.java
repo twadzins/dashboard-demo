@@ -31,6 +31,7 @@ import com.vaadin.navigator.ViewChangeListener;
 import com.vaadin.server.Page;
 import com.vaadin.server.ThemeResource;
 import com.vaadin.server.VaadinRequest;
+import com.vaadin.server.VaadinSession;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.AbstractSelect.AcceptItem;
 import com.vaadin.ui.Alignment;
@@ -90,6 +91,10 @@ public class DashboardUI extends UI {
     protected void init(VaadinRequest request) {
         getSession().setConverterFactory(new MyConverterFactory());
 
+        DashboardErrorHandler errorHandler = new DashboardErrorHandler();
+        setErrorHandler(errorHandler);
+        getSession().setErrorHandler(errorHandler);
+        
         helpManager = new HelpManager(this);
 
         setLocale(Locale.US);
@@ -105,25 +110,46 @@ public class DashboardUI extends UI {
         bg.addStyleName("login-bg");
         root.addComponent(bg);
 
-        buildLoginView(false);
+        if (!isLoggedIn()) {
+            buildLoginView(false);
+        } else {
+            buildMainView();
+        }
+        
+//        try {
+//            Thread.sleep(50000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
     }
 
+    private boolean isLoggedIn() {
+        Boolean loggedIn = (Boolean)VaadinSession.getCurrent().getAttribute("loggedIn");
+        return loggedIn != null || Boolean.TRUE.equals(loggedIn);
+    }
+
+    
+    public void markLoggedIn(boolean loggedIn) {
+        if (loggedIn) {
+            VaadinSession.getCurrent().setAttribute("loggedIn", true);
+        } else {
+            VaadinSession.getCurrent().setAttribute("loggedIn", null);
+        }
+    }
+    
     private void buildLoginView(boolean exit) {
         if (exit) {
             root.removeAllComponents();
         }
-        helpManager.closeAll();
-        HelpOverlay w = helpManager
-                .addOverlay(
-                        "Welcome to the Dashboard Demo Application",
-                        "<p>This application is not real, it only demonstrates an application built with the <a href=\"http://vaadin.com\">Vaadin framework</a>.</p><p>No username or password is required, just click the ‘Sign In’ button to continue. You can try out a random username and password, though.</p>",
-                        "login");
-        w.center();
-        addWindow(w);
+        addWelcomePopupWindow();
 
         addStyleName("login");
 
+        addLoginLayout();
+    }
+
+    private void addLoginLayout() {
         loginLayout = new VerticalLayout();
         loginLayout.setSizeFull();
         loginLayout.addStyleName("login-layout");
@@ -156,6 +182,7 @@ public class DashboardUI extends UI {
         fields.setMargin(true);
         fields.addStyleName("fields");
 
+//        final TextField username = new TextField("User");
         final TextField username = new TextField("Username");
         username.focus();
         fields.addComponent(username);
@@ -184,6 +211,7 @@ public class DashboardUI extends UI {
                         && password.getValue() != null
                         && password.getValue().equals("")) {
                     signin.removeShortcutListener(enter);
+                    markLoggedIn(true);
                     buildMainView();
                 } else {
                     if (loginPanel.getComponentCount() > 2) {
@@ -213,6 +241,17 @@ public class DashboardUI extends UI {
         loginLayout.setComponentAlignment(loginPanel, Alignment.MIDDLE_CENTER);
     }
 
+    private void addWelcomePopupWindow() {
+        helpManager.closeAll();
+        HelpOverlay w = helpManager
+                .addOverlay(
+                        "Welcome to the Dashboard Demo Application",
+                        "<p>This application is not real, it only demonstrates an application built with the <a href=\"http://vaadin.com\">Vaadin framework</a>.</p><p>No username or password is required, just click the ‘Sign In’ button to continue. You can try out a random username and password, though.</p>",
+                        "login");
+        w.center();
+        addWindow(w);
+    }
+
     private void buildMainView() {
 
         nav = new Navigator(this, content);
@@ -223,7 +262,9 @@ public class DashboardUI extends UI {
 
         helpManager.closeAll();
         removeStyleName("login");
-        root.removeComponent(loginLayout);
+        if (loginLayout != null) {
+            root.removeComponent(loginLayout);
+        }
 
         root.addComponent(new HorizontalLayout() {
             {
@@ -297,6 +338,7 @@ public class DashboardUI extends UI {
                                 exit.addClickListener(new ClickListener() {
                                     @Override
                                     public void buttonClick(ClickEvent event) {
+                                        markLoggedIn(false);
                                         buildLoginView(true);
                                     }
                                 });

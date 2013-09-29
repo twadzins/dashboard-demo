@@ -1,4 +1,4 @@
-Vaadin TestBench/Selenium enhancements - uses Vaadin QuickTickets Dashboard Demo
+Vaadin TestBench/Selenium enhancements - uses Vaadin's QuickTickets Dashboard Demo
 ==================================
 
 NOTE: README is in progress. Project is not quite ready for general use yet, but, sure, keep reading.. 

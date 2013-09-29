@@ -10,7 +10,7 @@
 
 package com.vaadin.demo.dashboard;
 
-import java.awt.Color;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -77,6 +77,7 @@ public class SalesView extends VerticalLayout implements View {
         add.addClickListener(new ClickListener() {
             @Override
             public void buttonClick(ClickEvent event) {
+//                if (true) throw new RuntimeException("Boom");
                 addSelectedMovie(movieSelect);
             }
         });

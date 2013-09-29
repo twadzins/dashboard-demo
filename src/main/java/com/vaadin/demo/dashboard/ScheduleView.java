@@ -68,6 +68,7 @@ public class ScheduleView extends CssLayout implements View {
 
     @Override
     public void enter(ViewChangeEvent event) {
+        //if (true) throw new RuntimeException("Boom");
         setSizeFull();
         addStyleName("schedule");
 
@@ -86,7 +87,7 @@ public class ScheduleView extends CssLayout implements View {
 
         for (final Movie movie : DataProvider.getMovies()) {
             Image poster = new Image(movie.title, new ExternalResource(
-                    movie.thumbUrl));
+                    movie.thumbUrl + "blah"));
             CssLayout frame = new CssLayout();
             frame.addComponent(poster);
             frame.addLayoutClickListener(new LayoutClickListener() {
@@ -248,7 +249,7 @@ public class ScheduleView extends CssLayout implements View {
             WebBrowser webBrowser = Page.getCurrent().getWebBrowser();
 
             String bg = "url(VAADIN/themes/" + UI.getCurrent().getTheme()
-                    + "/img/event-title-bg.png), url(" + m.posterUrl + ")";
+                    + "/img/event-title-bg.png), url(" + m.posterUrl + "blah)";
 
             // IE8 doesn't support multiple background images
             if (webBrowser.isIE() && webBrowser.getBrowserMajorVersion() == 8) {
