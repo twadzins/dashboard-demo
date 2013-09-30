@@ -455,7 +455,7 @@ abstract public class BaseTestBenchTestCase extends TestBenchTestCase {
     }
 
     private void useChromeDriver() {
-        System.setProperty("webdriver.chrome.driver", "C:/apps/dashboard-demo/src/test/resources/programs/chromedriver/chromedriver2_win32_0.8/chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "/src/test/resources/programs/chromedriver/chromedriver2_win32_0.8/chromedriver.exe");
         setDriver(TestBench.createDriver(new ChromeDriver()));
     }
 
