@@ -105,7 +105,7 @@ abstract public class BaseTestBenchTestCase extends TestBenchTestCase {
         //Change to "true" to enable ChromeDriver (or launch with -dtestbench.useChromeDriver=true
         USE_CHROME_DRIVER = Boolean.parseBoolean(System.getProperty("testbench.useChromeDriver", "false"));
 
-        BASE_URL = System.getProperty("testbench.baseUrl", "http://localhost:8080/quicktickets-dashboard-1.0.1/");
+        BASE_URL = System.getProperty("testbench.baseUrl", "http://localhost:8080/quicktickets-dashboard-1b/");
         UPDATE_RALLY_TEST_CASE = Boolean.parseBoolean(System.getProperty("testbench.updateRallyTestCases", "false"));
         RALLY_SERVER_URL = System.getProperty("rallyServerUrl", "https://rally1.rallydev.com");
         RALLY_USERNAME = System.getProperty("rallyUsername", "not defined"); //
@@ -113,10 +113,12 @@ abstract public class BaseTestBenchTestCase extends TestBenchTestCase {
         JENKINS_BUILD_NUMBER = System.getProperty("jenkinsBuildNumber", "unknown");
         JENKINS_BUILD_URL = System.getProperty("jenkinsBuildUrl", "javascript://alert('No jenkins url exists because this build was not run by jenkins for some reason...')");
 
-        logStep.info("Base url:" + BASE_URL + " - Using Chrome Driver: " + USE_CHROME_DRIVER);
 
         if(!USE_CHROME_DRIVER){
+            logStep.info("Initializing GhostDriver");
             launchPhantomJs(appDir);
+        } else {
+            logStep.info("Initializing ChromeDriver");
         }
     }
     

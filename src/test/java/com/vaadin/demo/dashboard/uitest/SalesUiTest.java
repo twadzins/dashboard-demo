@@ -13,7 +13,7 @@ public class SalesUiTest extends DemoTestBenchTestCase {
     @Test(invocationCount = 1)
     @RallyTestCase("TC123")
     public void clearTimelineAndAddSeries() throws Exception {
-        open();
+        openPageUnderTest();
         clickButton("Clear");
         assertLabelExists(EMPTY_CHART_CAPTION);
         
@@ -22,7 +22,6 @@ public class SalesUiTest extends DemoTestBenchTestCase {
         clickButton("Add");
         //prove that this actually added something to the timeline
         assertTimelineLegendLabelExists(selectedMovieTitle);
-
     }
 
     private void assertTimelineLegendLabelExists(String label) {
@@ -32,7 +31,7 @@ public class SalesUiTest extends DemoTestBenchTestCase {
         
     }
 
-    private void open() {
+    private void openPageUnderTest() {
         open("#!/sales");
     }
 
